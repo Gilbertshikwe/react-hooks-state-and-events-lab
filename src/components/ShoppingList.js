@@ -1,19 +1,24 @@
-import React from "react";
+// ShoppingList.js
+import React, { useState } from "react";
 import Item from "./Item";
+import Filter from "./Filter";
 
-function ShoppingList({ items }) {
+function ShoppingList({ items, darkMode }) {
+  const [selectedCategory, setSelectedCategory] = useState("All");
+
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category);
+  };
+
+  const filteredItems = selectedCategory === "All"
+    ? items
+    : items.filter(item => item.category === selectedCategory);
+
   return (
-    <div className="ShoppingList">
-      <div className="Filter">
-        <select name="filter">
-          <option value="All">Filter by category</option>
-          <option value="Produce">Produce</option>
-          <option value="Dairy">Dairy</option>
-          <option value="Dessert">Dessert</option>
-        </select>
-      </div>
+    <div className={`ShoppingList ${darkMode ? "dark" : "light"}`}>
+      <Filter onCategoryChange={handleCategoryChange} />
       <ul className="Items">
-        {items.map((item) => (
+        {filteredItems.map((item) => (
           <Item key={item.id} name={item.name} category={item.category} />
         ))}
       </ul>
